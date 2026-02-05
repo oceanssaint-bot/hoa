@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOUSE OF ANO | INSTITUTIONAL ARCHIVE</title>
+    <style>
+        /* --- SECTION: THE FOUNDATION --- */
+        :root {
+            --bg: #ffffff;
+            --text-main: #000000;
+            --text-muted: #a0a0a0;
+            --nav-height: 80px;
+            --script-paper: #fcfaf2; /* Off-white script paper color */
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
+            background: var(--bg); 
+            color: var(--text-main); 
+            text-transform: uppercase; 
+            overflow: hidden; 
+        }
+
+        /* --- SECTION: NAVIGATION --- */
+        nav { 
+            position: fixed; 
+            top: 0; width: 100%; height: var(--nav-height); 
+            background: #000; color: #fff; 
+            display: flex; align-items: center; justify-content: space-between; 
+            padding: 0 40px; z-index: 1000;
+        }
+        
+        .logo-container img { height: 70px; width: auto; display: block; }
+        
+        .nav-links { display: flex; gap: 60px; }
+        .nav-links a { 
+            color: #fff; text-decoration: none; cursor: pointer; 
+            font-size: 11px; letter-spacing: 2px; font-weight: bold;
+            transition: opacity 0.3s; 
+        }
+        .nav-links a:hover { opacity: 0.6; }
+
+        .burger { display: none; cursor: pointer; flex-direction: column; gap: 6px; }
+        .burger div { width: 30px; height: 2px; background-color: #fff; }
+
+        /* --- SECTION: MODALS (SMOOTHED) --- */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; 
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(5px);
+            z-index: 2000; padding: 120px 40px 40px; overflow-y: auto;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; } to { opacity: 1; }
+        }
+        
+        .close-btn { 
+            position: fixed; top: 30px; right: 40px; cursor: pointer; 
+            font-size: 11px; font-weight: bold; letter-spacing: 2px;
+            border: 1px solid #000; padding: 10px 20px;
+            transition: 0.3s; background: #fff;
+        }
+        .close-btn:hover { background: #000; color: #fff; }
+
+        /* --- US MODAL (The Dossier) --- */
+        .origin-text { 
+            max-width: 700px; margin: 0 auto; text-transform: none; 
+            line-height: 1.6; font-size: 16px; color: #000; 
+            border-left: 2px solid #000; padding-left: 30px;
+        }
+        .origin-text p { margin-bottom: 25px; }
+        .origin-highlight { font-weight: normal; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* --- YOU MODAL (The Tri-Wing System) --- */
+        .wings-flex {
+            display: flex; height: 80%; justify-content: center; 
+            align-items: center; gap: 30px; flex-wrap: wrap;
+            max-width: 1400px; margin: 0 auto;
+        }
+        
+        .wing-box {
+            flex: 1; min-width: 300px; height: 450px;
+            border: 1px solid #e0e0e0; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; text-decoration: none; color: #000; 
+            transition: all 0.4s ease; cursor: pointer;
+        }
+        
+        .wing-box:hover { 
+            background: #000; color: #fff; border-color: #000; 
+            transform: translateY(-5px); 
+        }
+        
+        .wing-title { font-size: 24px; margin-bottom: 15px; letter-spacing: 1px; }
+        .wing-sub { font-size: 10px; letter-spacing: 2px; color: #666; }
+        .wing-box:hover .wing-sub { color: #ccc; }
+
+        /* --- SCRIPT MODAL (PRODUCTION SERVICES) [Source 26] --- */
+        .script-theme {
+            background-color: var(--script-paper) !important;
+            font-family: 'Courier New', Courier, monospace !important;
+            text-transform: none !important;
+            color: #1a1a1a;
+        }
+
+        .script-container { max-width: 800px; margin: 0 auto; padding-bottom: 100px; }
+        .script-slug { font-weight: bold; text-decoration: underline; margin-bottom: 20px; display: block; }
+        .script-action { margin-bottom: 30px; line-height: 1.4; display: block; }
+        .script-character { display: block; text-align: center; margin: 40px auto 10px; width: 300px; font-weight: bold; }
+        .script-dialogue { display: block; text-align: center; max-width: 450px; margin: 0 auto 40px; line-height: 1.3; }
+        .service-list-item { margin-bottom: 20px; display: block; }
+        .service-title { font-weight: bold; text-transform: uppercase; }
+
+        /* --- TALK MODAL --- */
+        .form-container { max-width: 600px; margin: 0 auto; padding-top: 50px; }
+        .input-line { 
+            width: 100%; border: none; border-bottom: 1px solid #000; 
+            padding: 15px 0; margin-bottom: 30px; outline: none; 
+            font-family: inherit; font-size: 14px; text-transform: uppercase; background: transparent;
+        }
+        .submit-btn {
+            background: #000; color: #fff; border: none; padding: 20px 40px;
+            width: 100%; cursor: pointer; font-weight: bold; letter-spacing: 2px;
+            transition: 0.3s;
+        }
+        .submit-btn:hover { background: #333; }
+
+        /* --- MAIN LAYOUT --- */
+        main { display: flex; padding-top: var(--nav-height); height: 100vh; }
+        
+        .index-column { 
+            width: 35%; height: 100%; display: flex; flex-direction: column; 
+            justify-content: center; padding: 60px; gap: 25px; 
+            border-right: 1px solid #f0f0f0; background: #fff;
+        }
+        
+        .media-column { 
+            width: 65%; height: 100%; overflow-y: scroll; 
+            scroll-snap-type: y mandatory; scrollbar-width: none; 
+            background: #f9f9f9; scroll-behavior: smooth;
+        }
+        .media-column::-webkit-scrollbar { display: none; }
+        
+        .media-block { 
+            height: 100%; display: flex; flex-direction: column; 
+            justify-content: center; align-items: center; padding: 40px; 
+            scroll-snap-align: center; position: relative;
+        }
+        
+        .media-container { 
+            width: 100%; max-width: 900px; aspect-ratio: 16/9; 
+            background: #e0e0e0; display: flex; justify-content: center; 
+            align-items: center; overflow: hidden; position: relative;
+        }
+        
+        /* THE VIDEO FIX: Handles iframes (YouTube/Vimeo) exactly like local videos [Source 71, 81] */
+        .media-container video,
+        .media-container iframe, 
+        .media-container img { 
+            width: 100%; height: 100%; 
+            object-fit: cover; 
+            border: none; 
+        }
+
+        .project-title { 
+            font-size: 13px; color: var(--text-muted); cursor: pointer; 
+            transition: 0.4s; letter-spacing: 1px; position: relative;
+            padding-left: 20px;
+        }
+        .project-title.active { color: var(--text-main); font-weight: bold; }
+        .project-title.active::before { content: "•"; position: absolute; left: 0; top: 0; }
+
+        .mobile-nav-overlay {
+            display: none; position: fixed; top: var(--nav-height); left: 0;
+            width: 100%; height: calc(100vh - var(--nav-height)); 
+            background: #000; z-index: 999;
+            padding: 40px; flex-direction: column; gap: 30px;
+        }
+        .mobile-nav-overlay a { color: #fff; text-decoration: none; font-size: 24px; letter-spacing: 1px; border-bottom: 1px solid #333; padding-bottom: 20px; }
+
+        .mobile-heading { display: none; } 
+        
+        footer { 
+            position: fixed; bottom: 0; left: 0; padding: 20px 40px;
+            font-size: 10px; color: #a0a0a0; z-index: 100; pointer-events: none;
+        }
+        footer a { color: #000; pointer-events: auto; text-decoration: none; margin-left: 10px; }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 900px) {
+            .wings-flex { flex-direction: column; height: auto; padding-bottom: 50px; }
+            .wing-box { width: 100%; height: 200px; }
+        }
+
+        @media (max-width: 768px) {
+            body { overflow-y: auto; }
+            .nav-links { display: none; }
+            .burger { display: flex; }
+            .index-column { display: none; }
+            .media-column { width: 100%; height: auto; overflow: visible; scroll-snap-type: none; }
+            .media-block { height: auto; display: flex; padding: 20px; margin-bottom: 40px; }
+            .media-container { aspect-ratio: 1/1; }
+            .mobile-heading { 
+                display: block; font-size: 14px; letter-spacing: 2px; font-weight: bold;
+                margin-bottom: 20px; padding-top: 20px; border-top: 1px solid #000; width: 100%;
+            }
+            .modal-overlay { padding: 100px 20px; }
+            .script-container { padding: 0 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav>
+    <div class="logo-container"><img src="images/ano.png" alt="ANO"></div>
+    <div class="nav-links">
+        <a onclick="toggleModal('us-modal')">US (ORIGIN)</a>
+        <a onclick="toggleModal('you-modal')">YOU (ACCESS)</a>
+        <a onclick="toggleModal('talk-modal')">TALK (CONTACT)</a>
+    </div>
+    <div class="burger" onclick="toggleMobileNav()"><div></div><div></div><div></div></div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div id="mobile-nav" class="mobile-nav-overlay">
+    <a onclick="closeMobileNav(); toggleModal('us-modal')">US</a>
+    <a onclick="closeMobileNav(); toggleModal('you-modal')">YOU</a>
+    <a onclick="closeMobileNav(); toggleModal('talk-modal')">TALK</a>
+</div>
+
+<!-- ========================================================== -->
+<!-- MODAL: US (THE DOSSIER) -->
+<!-- ========================================================== -->
+<div id="us-modal" class="modal-overlay">
+    <div class="close-btn" onclick="toggleModal('us-modal')">[ CLOSE DOSSIER ]</div>
+    <div class="origin-text">
+        <p><span class="origin-highlight">House of Ano</span> was not conceived as a business first. It emerged as a response. A response to culture being mined for trends instead of preserved as knowledge.</p>
+        <p>Founded by <span class="origin-highlight">Oceans</span> and <span class="origin-highlight">Andile Ndunge</span>, the institution rejects the idea of chasing virality. Instead, it builds structures that outlive their creators.</p>
+        <p>We function as a cultural system-builder. Our mandate is simple: <span class="origin-highlight">Culture is not decoration. Culture is infrastructure.</span></p>
+        <p>The House operates under strict governance. It does not seek to dominate culture. It seeks to architect it quietly, allowing others to feel the impact without always seeing the hand.</p>
+    </div>
+</div>
+
+<!-- ========================================================== -->
+<!-- MODAL: YOU (THE TRI-WING GATEWAY) -->
+<!-- ========================================================== -->
+<div id="you-modal" class="modal-overlay">
+    <div class="close-btn" onclick="toggleModal('you-modal')">[ CLOSE GATEWAY ]</div>
+    
+    <div class="wings-flex">
+        
+        <!-- WING 1: PUBLIC (Saint Reverie) -->
+        <a href="https://www.saintreverie.co.za" target="_blank" class="wing-box">
+            <h2 class="wing-title">SAINT REVERIE</h2>
+            <p class="wing-sub">THE PUBLIC CULTURAL WING</p>
+            <p style="font-size: 9px; margin-top: 10px;">( BREATHES LOUDLY )</p>
+        </a>
+
+        <!-- WING 2: PRODUCTION (Trigger Script Modal) -->
+        <div onclick="toggleModal('script-modal')" class="wing-box">
+            <h2 class="wing-title">HOA PRODUCTION</h2>
+            <p class="wing-sub">EXECUTION & TRANSLATION</p>
+            <p style="font-size: 9px; margin-top: 10px;">( INVISIBLE INFRASTRUCTURE )</p>
+        </div>
+
+        <!-- WING 3: PRIVATE (ANO:BLACK) -->
+        <a href="https://www.instagram.com/anoblacklifestyle" target="_blank" class="wing-box">
+            <h2 class="wing-title">ANO:BLACK</h2>
+            <p class="wing-sub">THE PRIVATE SOCIAL WING</p>
+            <p style="font-size: 9px; margin-top: 10px;">( DISTILLED & ARCHIVED )</p>
+        </a>
+
+    </div>
+</div>
+
+<!-- ========================================================== -->
+<!-- MODAL: SCRIPT PAPER (PRODUCTION SERVICES) -->
+<!-- ========================================================== -->
+<div id="script-modal" class="modal-overlay script-theme">
+    <div class="close-btn" onclick="toggleModal('script-modal')">[ FADE OUT ]</div>
+    
+    <div class="script-container">
+        <span class="script-slug">INT. HOUSE OF ANO - DAY</span>
+        
+        <span class="script-action">
+            The room is quiet. A projector hums in the background. On the table sits the PRODUCTION MANIFESTO. It is not a menu. It is a system.
+        </span>
+
+        <span class="script-character">HOUSE OF ANO</span>
+        <span class="script-dialogue">
+            Production is not a department. It is a discipline.<br>
+            We do not separate thinking from making.<br>
+            We turn meaning into form.
+        </span>
+
+        <span class="script-action">
+            The camera pans down the list of CAPABILITIES:
+        </span>
+        <br>
+
+        <div class="service-list-item">
+            <span class="service-title">1. CREATIVE DIRECTION & ARCHITECTURE</span><br>
+            Concept development. Narrative systems. World-building. We design the system before we design the output.
+        </div>
+
+        <div class="service-list-item">
+            <span class="service-title">2. FILM & MOTION PRODUCTION</span><br>
+            Short films. Brand documentaries. Visual essays. Cinematic work that prioritises atmosphere and longevity.
+        </div>
+
+        <div class="service-list-item">
+            <span class="service-title">3. DIGITAL CONTENT & PLATFORMS</span><br>
+            Social-first visual systems. Content ecosystems. Assets designed to live, move, and age well online.
+        </div>
+        
+        <div class="service-list-item">
+            <span class="service-title">4. 3D, CGI & ADVANCED VISUALS</span><br>
+            Virtual prototypes. Digital scenography. Visualising ideas and futures that do not yet physically exist.
+        </div>
+
+        <div class="service-list-item">
+            <span class="service-title">5. PHOTOGRAPHY AS DOCUMENTATION</span><br>
+            Campaigns. Editorials. Archival imagery. We approach photography as cultural proof, not simple capture.
+        </div>
+
+        <div class="service-list-item">
+            <span class="service-title">6. EXPERIENTIAL PRODUCTION</span><br>
+            Spatial storytelling. Stage design. Lighting and audio-visual flow. Events designed as living systems.
+        </div>
+
+        <div class="service-list-item">
+            <span class="service-title">7. SPATIAL & SET DESIGN</span><br>
+            Installations. Retail environments. Pop-up interventions. Space communicates before language.
+        </div>
+
+        <div class="service-list-item">
+            <span class="service-title">8. SOUND & AUDIO INFRASTRUCTURE</span><br>
+            Original composition. Sonic branding. Sound design. Treating audio as an emotional layer, not an afterthought.
+        </div>
+
+        <div class="service-list-item">
+            <span class="service-title">9. POST-PRODUCTION & FINISHING</span><br>
+            Editing. Colour grading. Asset management. Ensuring durability and adaptability over time.
+        </div>
+
+        <div class="service-list-item">
+            <span class="service-title">10. CULTURAL PROTOTYPING</span><br>
+            Experimental research. Future-facing concept testing. Innovation that feeds all other layers.
+        </div>
+
+        <span class="script-slug" style="margin-top: 50px;">CUT TO BLACK.</span>
+    </div>
+</div>
+
+<!-- ========================================================== -->
+<!-- MODAL: TALK (CONTACT) -->
+<!-- ========================================================== -->
+<div id="talk-modal" class="modal-overlay">
+    <div class="close-btn" onclick="toggleModal('talk-modal')">[ CLOSE LOG ]</div>
+    <div class="form-container">
+        <p style="margin-bottom: 30px; letter-spacing: 2px; font-size: 12px;">DEPOSIT RECORD INTO THE ARCHIVE</p>
+        <input type="text" class="input-line" placeholder="NAME OF ENTITY">
+        <input type="email" class="input-line" placeholder="CONTACT COORDINATES">
+        <textarea class="input-line" placeholder="STATEMENT OF INTENT" rows="1"></textarea>
+        <button class="submit-btn">TRANSMIT</button>
+    </div>
+</div>
+
+<!-- MAIN INTERFACE -->
+<main>
+    <!-- LEFT COLUMN: THE INDEX -->
+    <div class="index-column">
+        <div style="margin-bottom: 40px; font-weight: bold; font-size: 10px; color: #000;">HOUSE OF ANO // ARCHIVE INDEX // 2026</div>
+        <a onclick="scrollToSection(3)" class="project-title">04. ANO FOR ZAN'S</a>
+        <a onclick="scrollToSection(2)" class="project-title">03. REVERIE COTERIE</a>
+        <a onclick="scrollToSection(1)" class="project-title">02. ANO FOR NDUNGE</a>
+        <a onclick="scrollToSection(0)" class="project-title active">01. INTRO / MANIFESTO</a>
+    </div>
+
+    <!-- RIGHT COLUMN: THE ARCHIVE STREAM -->
+    <div class="media-column" id="mediaCol">
+        
+        <!-- BLOCK 1: INTRO (YOUTUBE INTEGRATED) [Source 81] -->
+        <section class="media-block">
+            <div class="mobile-heading">01. INTRO / MANIFESTO</div>
+            <div class="media-container">
+                <!-- YOUTUBE IFRAME INTEGRATED HERE -->
+                <iframe 
+                    src="https://www.youtube.com/embed/XQoqlythGiY?rel=0&modestbranding=1&autoplay=1&mute=1" 
+                    title="House of Ano Intro" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </section>
+
+        <!-- BLOCK 2 -->
+        <section class="media-block">
+            <div class="mobile-heading">02. ANO FOR NDUNGE</div>
+            <div class="media-container">
+                <img src="images/ndunge.jpeg" alt="Andile Ndunge">
+            </div>
+        </section>
+
+        <!-- BLOCK 3 -->
+        <section class="media-block">
+            <div class="mobile-heading">03. REVERIE COTERIE</div>
+            <div class="media-container">
+                <img src="images/Croissant.png" alt="Reverie Coterie">
+            </div>
+        </section>
+
+        <!-- BLOCK 4 -->
+        <section class="media-block">
+            <div class="mobile-heading">04. ANO FOR ZAN'S</div>
+            <div class="media-container">
+                <img src="images/8.jpg" alt="Zan's">
+            </div>
+        </section>
+
+    </div>
+</main>
+
+<footer>
+    © HOUSE OF ANO 2026 | INSTITUTIONAL MEMORY | <a href="https://www.instagram.com/houseofano" target="_blank">IG</a>
+</footer>
+
+<script>
+    // SCROLL SYNC
+    function scrollToSection(index) {
+        const mediaCol = document.getElementById('mediaCol');
+        mediaCol.scrollTo({ top: index * mediaCol.clientHeight, behavior: 'smooth' });
+    }
+
+    const mediaCol = document.getElementById('mediaCol');
+    mediaCol.addEventListener('scroll', () => {
+        const index = Math.round(mediaCol.scrollTop / mediaCol.clientHeight);
+        document.querySelectorAll('.project-title').forEach((t) => {
+            const targetIndex = parseInt(t.getAttribute('onclick').match(/\d+/));
+            t.classList.toggle('active', targetIndex === index);
+        });
+    });
+
+    // MODAL LOGIC
+    function toggleModal(id) {
+        const m = document.getElementById(id);
+        const isOpen = m.style.display === 'block';
+        document.querySelectorAll('.modal-overlay').forEach(el => {
+            el.style.display = 'none';
+        });
+        if (!isOpen) {
+            m.style.display = 'block';
+        }
+    }
+
+    function toggleMobileNav() {
+        const nav = document.getElementById('mobile-nav');
+        nav.style.display = (nav.style.display === 'flex') ? 'none' : 'flex';
+    }
+
+    function closeMobileNav() {
+        document.getElementById('mobile-nav').style.display = 'none';
+    }
+</script>
+
+</body>
+</html>
